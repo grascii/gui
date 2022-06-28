@@ -57,7 +57,10 @@ class Application(tk.Frame):
                     aspirate_mode=self.aspirate_mode.get(),
                     disjoiner_mode=self.disjoiner_mode.get(),
             )
-            self.results_content.set(f"Results: {len(results)}\n\n" + "\n".join(results))
+            if len(results) > 2000:
+                self.results_content.set(f"Results: {len(results)} (Only displaying the first 2000)\n\n" + "\n".join(results[:2000]))
+            else:
+                self.results_content.set(f"Results: {len(results)}\n\n" + "\n".join(results))
 
         def search_event(event):
             search()
