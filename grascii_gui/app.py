@@ -57,10 +57,11 @@ class Application(tk.Frame):
                     aspirate_mode=self.aspirate_mode.get(),
                     disjoiner_mode=self.disjoiner_mode.get(),
             )
-            if len(results) > 2000:
-                self.results_content.set(f"Results: {len(results)} (Only displaying the first 2000)\n\n" + "\n".join(results[:2000]))
-            else:
-                self.results_content.set(f"Results: {len(results)}\n\n" + "\n".join(results))
+            if results:
+                if len(results) > 2000:
+                    self.results_content.set(f"Results: {len(results)} (Only displaying the first 2000)\n\n" + "\n".join(results[:2000]))
+                else:
+                    self.results_content.set(f"Results: {len(results)}\n\n" + "\n".join(results))
 
         def search_event(event):
             search()
@@ -81,48 +82,48 @@ class Application(tk.Frame):
         lbl_search_mode = tk.Label(master=frm_settings, text="Search Mode")
         lbl_search_mode.grid(row=1, column=0, padx=DEFAULT_PADDING)
         spn_search_mode = ttk.Spinbox(master=frm_settings, textvariable=self.search_mode, values=[member.value for member in SearchMode])
-        spn_search_mode.grid(row=1, column=1, pady=DEFAULT_PADDING / 2)
+        spn_search_mode.grid(row=1, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         spn_search_mode.state(['readonly'])
         lbl_interpretation = tk.Label(master=frm_settings, text="Interpretation")
         lbl_interpretation.grid(row=2, column=0, padx=DEFAULT_PADDING)
         spn_interpretation = ttk.Spinbox(master=frm_settings, textvariable=self.interpretation, values=["best", "all"])
-        spn_interpretation.grid(row=2, column=1, pady=DEFAULT_PADDING / 2)
+        spn_interpretation.grid(row=2, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         spn_interpretation.state(['readonly'])
         lbl_uncertainty = tk.Label(master=frm_settings, text="Uncertainty")
         lbl_uncertainty.grid(row=3, column=0, padx=DEFAULT_PADDING)
         spn_uncertainty = ttk.Spinbox(master=frm_settings, from_=0, to=2, textvariable=self.uncertainty)
-        spn_uncertainty.grid(row=3, column=1, pady=DEFAULT_PADDING / 2)
+        spn_uncertainty.grid(row=3, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         spn_uncertainty.state(['readonly'])
         lbl_fix_first = tk.Label(master=frm_settings, text="Fix First")
         lbl_fix_first.grid(row=4, column=0, padx=DEFAULT_PADDING)
         chk_fix_first = tk.Checkbutton(master=frm_settings, variable=self.fix_first)
-        chk_fix_first.grid(row=4, column=1, pady=DEFAULT_PADDING / 2)
+        chk_fix_first.grid(row=4, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         lbl_annotation_mode = tk.Label(master=frm_settings, text="Annotation Mode")
         lbl_annotation_mode.grid(row=5, column=0, padx=DEFAULT_PADDING)
         spn_annotation_mode = ttk.Spinbox(master=frm_settings, textvariable=self.annotation_mode, values=["discard", "retain", "strict"])
-        spn_annotation_mode.grid(row=5, column=1, pady=DEFAULT_PADDING / 2)
+        spn_annotation_mode.grid(row=5, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         spn_annotation_mode.state(['readonly'])
         lbl_aspirate_mode = tk.Label(master=frm_settings, text="Aspirate Mode")
         lbl_aspirate_mode.grid(row=6, column=0, padx=DEFAULT_PADDING)
         spn_aspirate_mode = ttk.Spinbox(master=frm_settings, textvariable=self.aspirate_mode, values=["discard", "retain", "strict"])
-        spn_aspirate_mode.grid(row=6, column=1, pady=DEFAULT_PADDING / 2)
+        spn_aspirate_mode.grid(row=6, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         spn_aspirate_mode.state(['readonly'])
         lbl_disjoiner_mode = tk.Label(master=frm_settings, text="Disjoiner Mode")
         lbl_disjoiner_mode.grid(row=7, column=0, padx=DEFAULT_PADDING)
         spn_disjoiner_mode = ttk.Spinbox(master=frm_settings, textvariable=self.disjoiner_mode, values=["discard", "retain", "strict"])
-        spn_disjoiner_mode.grid(row=7, column=1, pady=DEFAULT_PADDING / 2)
+        spn_disjoiner_mode.grid(row=7, column=1, pady=DEFAULT_PADDING / 2, padx=DEFAULT_PADDING)
         spn_disjoiner_mode.state(['readonly'])
         lbl_dictionaries = tk.Label(master=frm_settings, text="Dictionaries")
-        lbl_dictionaries.grid(row=8, column=0, columnspan=2, pady=DEFAULT_PADDING)
+        lbl_dictionaries.grid(row=8, column=0, sticky="n", pady=DEFAULT_PADDING)
         choices = tk.StringVar(value=["preanniversary", "preanniversary-phrases"])
         self.lst_dictionaries = tk.Listbox(master=frm_settings, listvariable=self.dictionaries, selectmode="extended")
         for i, dictionary in enumerate(list(self.available_dicts)):
             if dictionary in self.default_dictionaries:
                 self.lst_dictionaries.selection_set(i)
-        self.lst_dictionaries.grid(row=9, column=0, columnspan=2)
+        self.lst_dictionaries.grid(row=8, column=1, sticky="ew", pady=DEFAULT_PADDING, padx=DEFAULT_PADDING)
 
     def create_results_frame(self):
-        canvas = tk.Canvas(master=self, width=250, relief=tk.GROOVE, borderwidth=5)
+        canvas = tk.Canvas(master=self, width=300, relief=tk.GROOVE, borderwidth=5)
         lbl_results = tk.Label(master=canvas, textvariable=self.results_content, justify=tk.LEFT)
         canvas.create_window((DEFAULT_PADDING * 2, DEFAULT_PADDING * 2), anchor="nw", window=lbl_results)
         scroll_results = ttk.Scrollbar(master=self, orient=tk.VERTICAL, command=canvas.yview)
