@@ -116,7 +116,7 @@ class Application(tk.Frame):
         lbl_dictionaries = tk.Label(master=frm_settings, text="Dictionaries")
         lbl_dictionaries.grid(row=8, column=0, sticky="n", pady=DEFAULT_PADDING)
         choices = tk.StringVar(value=["preanniversary", "preanniversary-phrases"])
-        self.lst_dictionaries = tk.Listbox(master=frm_settings, listvariable=self.dictionaries, selectmode="extended")
+        self.lst_dictionaries = tk.Listbox(master=frm_settings, listvariable=self.dictionaries, selectmode="extended", exportselection=False)
         for i, dictionary in enumerate(list(self.available_dicts)):
             if dictionary in self.default_dictionaries:
                 self.lst_dictionaries.selection_set(i)
