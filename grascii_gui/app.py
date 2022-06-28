@@ -12,7 +12,7 @@ class Application(tk.Frame):
 
     def __init__(self, master):
         super().__init__(master)
-        self.pack(fill=tk.X)
+        self.pack(fill=tk.BOTH, expand=True)
         self.results_content = tk.StringVar()
         self.search_mode = tk.StringVar(value=SEARCH["SearchMode"])
         self.interpretation = tk.StringVar(value=SEARCH["Interpretation"])
@@ -33,6 +33,8 @@ class Application(tk.Frame):
     def create_widgets(self):
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
         self.create_search_bar()
         self.create_settings_frame()
         self.create_results_frame()
@@ -69,7 +71,7 @@ class Application(tk.Frame):
 
     def create_settings_frame(self):
         frm_settings = tk.Frame(master=self)
-        frm_settings.grid(row=1, column=0, padx=4, pady=4)
+        frm_settings.grid(row=1, column=0, padx=4, pady=4, sticky="n")
         lbl_settings = tk.Label(master=frm_settings, text="Settings")
         lbl_settings.grid(row=0, column=0, columnspan=2)
         lbl_search_mode = tk.Label(master=frm_settings, text="Search Mode")
@@ -110,10 +112,14 @@ class Application(tk.Frame):
         self.lst_dictionaries.grid(row=9, column=0, columnspan=2)
 
     def create_results_frame(self):
-        frm_results = tk.Frame(master=self, width=50)
-        frm_results.grid(row=1, column=1, sticky="nw")
-        lbl_results = tk.Label(master=frm_results, textvariable=self.results_content, justify=tk.LEFT)
-        lbl_results.pack()
+        canvas = tk.Canvas(master=self, width=250)
+        lbl_results = tk.Label(master=canvas, textvariable=self.results_content, justify=tk.LEFT)
+        canvas.create_window((4, 4), anchor="nw", window=lbl_results)
+        scroll_results = ttk.Scrollbar(master=self, orient=tk.VERTICAL, command=canvas.yview)
+        canvas.configure(yscrollcommand=scroll_results.set)
+        scroll_results.grid(row=1, column=2, sticky="ns")
+        canvas.grid(row=1, column=1, sticky="nesw")
+        lbl_results.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
 
 
 def main():
