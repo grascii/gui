@@ -2,12 +2,15 @@
 import tkinter as tk
 from tkinter import ttk
 
+from grascii.searchers import GrasciiSearcher
+
 
 class Application(tk.Frame):
 
     def __init__(self, master):
         super().__init__(master)
         self.pack(fill=tk.X)
+        self.results_content = tk.StringVar()
         self.create_widgets()
 
     def create_widgets(self):
@@ -18,11 +21,18 @@ class Application(tk.Frame):
         self.create_results_frame()
 
     def create_search_bar(self):
+
+        def search():
+            searcher = GrasciiSearcher()
+            grascii = ent_search.get()
+            results = searcher.search(grascii=grascii)
+            self.results_content.set(f"Results: {len(results)}\n\n" + "\n".join(results))
+
         frm_search = tk.Frame(master=self)
         frm_search.grid(row=0, column=0, columnspan=2)
         ent_search = tk.Entry(master=frm_search)
         ent_search.pack(fill=tk.Y, side=tk.LEFT)
-        btn_search = tk.Button(master=frm_search, text="Search")
+        btn_search = tk.Button(master=frm_search, text="Search", command=search)
         btn_search.pack(fill=tk.Y, side=tk.LEFT)
 
     def create_settings_frame(self):
@@ -64,12 +74,10 @@ class Application(tk.Frame):
         lst_dictionaries = tk.Listbox(master=frm_settings, listvariable=choices, selectmode="extended")
         lst_dictionaries.grid(row=9, column=0, columnspan=2)
 
-
-
     def create_results_frame(self):
-        frm_results = tk.Frame(master=self)
+        frm_results = tk.Frame(master=self, width=50)
         frm_results.grid(row=1, column=1, sticky="nw")
-        lbl_results = tk.Label(master=frm_results, text="Results:")
+        lbl_results = tk.Label(master=frm_results, textvariable=self.results_content, justify=tk.LEFT)
         lbl_results.pack()
 
 
