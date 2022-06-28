@@ -32,6 +32,9 @@ Documentation = "https://github.com/grascii/grascii-gui"
 Issues = "https://github.com/grascii/grascii-gui/issues"
 Source = "https://github.com/grascii/grascii-gui"
 
+[project.gui-scripts]
+grascii-gui = "grascii_gui.__main__:main"
+
 [tool.hatch.version]
 path = "grascii_gui/__about__.py"
 

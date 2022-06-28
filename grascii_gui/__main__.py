@@ -1,3 +1,12 @@
-from grascii_gui.app import main
+import tkinter as tk
 
-main()
+from grascii_gui.app import Application
+
+def main():
+    root = tk.Tk()
+    root.title("Grascii Search")
+    app = Application(root)
+    app.mainloop()
+
+if __name__ == "__main__":
+    main()

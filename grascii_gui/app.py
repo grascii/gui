@@ -57,7 +57,7 @@ class Application(tk.Frame):
                     aspirate_mode=self.aspirate_mode.get(),
                     disjoiner_mode=self.disjoiner_mode.get(),
             )
-            if results:
+            if results is not None:
                 if len(results) > 2000:
                     self.results_content.set(f"Results: {len(results)} (Only displaying the first 2000)\n\n" + "\n".join(results[:2000]))
                 else:
@@ -131,9 +131,3 @@ class Application(tk.Frame):
         scroll_results.grid(row=1, column=2, sticky="ns", padx=DEFAULT_PADDING, pady=DEFAULT_PADDING)
         canvas.grid(row=1, column=1, sticky="nesw", padx=DEFAULT_PADDING, pady=DEFAULT_PADDING)
         lbl_results.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
-
-
-def main():
-    root = tk.Tk()
-    app = Application(root)
-    app.mainloop()
