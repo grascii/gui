@@ -2,6 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+from grascii.dictionary.list import get_built_ins, get_installed
 from grascii.searchers import GrasciiSearcher
 from grascii.defaults import SEARCH
 from grascii.regen import SearchMode
@@ -20,6 +21,13 @@ class Application(tk.Frame):
         self.annotation_mode = tk.StringVar(value=SEARCH["AnnotationMode"])
         self.aspirate_mode = tk.StringVar(value=SEARCH["AspirateMode"])
         self.disjoiner_mode = tk.StringVar(value=SEARCH["DisjoinerMode"])
+
+        self.default_dictionaries = SEARCH["Dictionary"].split()
+        self.available_dicts = set(self.default_dictionaries)
+        installed = map(lambda s: ":" + s, get_installed())
+        built_ins = map(lambda s: ":" + s, get_built_ins())
+        self.available_dicts.update(installed, built_ins)
+        self.dictionaries = tk.StringVar(value=list(self.available_dicts))
         self.create_widgets()
 
     def create_widgets(self):
@@ -32,7 +40,9 @@ class Application(tk.Frame):
     def create_search_bar(self):
 
         def search():
-            searcher = GrasciiSearcher()
+            dictionary_indices = self.lst_dictionaries.curselection()
+            dictionaries=[d for i, d in enumerate(list(self.available_dicts)) if i in dictionary_indices]
+            searcher = GrasciiSearcher(dictionaries=dictionaries)
             grascii = ent_search.get()
             results = searcher.search(
                     grascii=grascii,
@@ -93,8 +103,11 @@ class Application(tk.Frame):
         lbl_dictionaries = tk.Label(master=frm_settings, text="Dictionaries")
         lbl_dictionaries.grid(row=8, column=0, columnspan=2)
         choices = tk.StringVar(value=["preanniversary", "preanniversary-phrases"])
-        lst_dictionaries = tk.Listbox(master=frm_settings, listvariable=choices, selectmode="extended")
-        lst_dictionaries.grid(row=9, column=0, columnspan=2)
+        self.lst_dictionaries = tk.Listbox(master=frm_settings, listvariable=self.dictionaries, selectmode="extended")
+        for i, dictionary in enumerate(list(self.available_dicts)):
+            if dictionary in self.default_dictionaries:
+                self.lst_dictionaries.selection_set(i)
+        self.lst_dictionaries.grid(row=9, column=0, columnspan=2)
 
     def create_results_frame(self):
         frm_results = tk.Frame(master=self, width=50)
