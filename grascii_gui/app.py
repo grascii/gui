@@ -16,8 +16,8 @@ class Application(tk.Frame):
         self.results_content = tk.StringVar()
         self.search_mode = tk.StringVar(value=SEARCH["SearchMode"])
         self.interpretation = tk.StringVar(value=SEARCH["Interpretation"])
-        self.uncertainty = tk.StringVar(value=SEARCH["Uncertainty"])
-        self.fix_first = tk.StringVar(value="false")
+        self.uncertainty = tk.IntVar(value=SEARCH.getint("Uncertainty"))
+        self.fix_first = tk.BooleanVar(value="false")
         self.annotation_mode = tk.StringVar(value=SEARCH["AnnotationMode"])
         self.aspirate_mode = tk.StringVar(value=SEARCH["AspirateMode"])
         self.disjoiner_mode = tk.StringVar(value=SEARCH["DisjoinerMode"])
@@ -48,8 +48,8 @@ class Application(tk.Frame):
                     grascii=grascii,
                     search_mode=self.search_mode.get(),
                     interpretation=self.interpretation.get(),
-                    uncertainty=int(self.uncertainty.get()),
-                    fix_first=bool(self.fix_first.get()),
+                    uncertainty=self.uncertainty.get(),
+                    fix_first=self.fix_first.get(),
                     annotation_mode=self.annotation_mode.get(),
                     aspirate_mode=self.aspirate_mode.get(),
                     disjoiner_mode=self.disjoiner_mode.get(),
@@ -86,7 +86,7 @@ class Application(tk.Frame):
         spn_uncertainty.grid(row=3, column=1)
         lbl_fix_first = tk.Label(master=frm_settings, text="Fix First")
         lbl_fix_first.grid(row=4, column=0)
-        chk_fix_first = tk.Checkbutton(master=frm_settings)
+        chk_fix_first = tk.Checkbutton(master=frm_settings, variable=self.fix_first)
         chk_fix_first.grid(row=4, column=1)
         lbl_annotation_mode = tk.Label(master=frm_settings, text="Annotation Mode")
         lbl_annotation_mode.grid(row=5, column=0)
