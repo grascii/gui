@@ -24,9 +24,7 @@ class Application(tk.Frame):
 
         self.default_dictionaries = SEARCH["Dictionary"].split()
         self.available_dicts = set(self.default_dictionaries)
-        installed = map(lambda s: ":" + s, get_installed())
-        built_ins = map(lambda s: ":" + s, get_built_ins())
-        self.available_dicts.update(installed, built_ins)
+        self.available_dicts.update(get_installed(), get_built_ins())
         self.dictionaries = tk.StringVar(value=list(self.available_dicts))
         self.create_widgets()
 
