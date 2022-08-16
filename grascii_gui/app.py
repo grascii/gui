@@ -49,7 +49,7 @@ class Application(tk.Frame):
             ]
             searcher = GrasciiSearcher(dictionaries=dictionaries)
             grascii = ent_search.get()
-            results = searcher.search(
+            results = searcher.sorted_search(
                 grascii=grascii,
                 search_mode=self.search_mode.get(),
                 interpretation=self.interpretation.get(),
@@ -60,14 +60,18 @@ class Application(tk.Frame):
                 disjoiner_mode=self.disjoiner_mode.get(),
             )
             if results is not None:
-                if len(results) > 2000:
+                displayed_results = [
+                    f"{result.entry.grascii} {result.entry.translation}"
+                    for result in results
+                ]
+                if len(displayed_results) > 2000:
                     self.results_content.set(
                         f"Results: {len(results)} (Only displaying the first 2000)\n\n"
-                        + "\n".join(results[:2000])
+                        + "\n".join(displayed_results[:2000])
                     )
                 else:
                     self.results_content.set(
-                        f"Results: {len(results)}\n\n" + "\n".join(results)
+                        f"Results: {len(results)}\n\n" + "\n".join(displayed_results)
                     )
 
         def search_event(event):
